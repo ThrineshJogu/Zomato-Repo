@@ -23,7 +23,34 @@ pipeline {
         }
         stage('image'){
             steps{
-                sh 'docker build -t image .'
+                sh 'docker build -t image1 .'
+            }
+        }
+        stage('scan'){
+            steps{
+                sh 'trivy image image1'
+            }
+        }
+        stage('tag'){
+            steps{
+                sh 'docker tag image1 thrineshjogu/zomato:image'
+            }
+        }
+        stage('push'){
+            steps{
+                scripts{
+                    withDockerRegistry(credentialsId: 'docker-hubs'){
+                       sh 'docker push thrineshjogu/zomato:image '
+                    }
+                }
+            } 
+        }
+        stage('container'){
+            steps{
+                sh '''
+                docker rm -f $(docker ps)
+                docker run -itd --name zomato -p 3000:3000 image
+                '''
             }
         }
     }
