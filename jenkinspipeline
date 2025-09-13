@@ -55,7 +55,7 @@ pipeline {
         stage('container'){
             steps{
                 sh '''
-                    docker run -itd --name zomato -p 3000:3000 zomato:image1
+                    docker run -itd --name zomato -p 3000:3000 thrineshjogu/zomato:image1
                 '''
             }
         }
