@@ -38,8 +38,8 @@ pipeline {
         }
         stage('push'){
             steps{
-                scripts{
-                    withDockerRegistry(credentialsId: 'docker-hubs'){
+                script{
+                    withDockerRegistry(credentialsId: 'docker-hubs') {
                        sh 'docker push thrineshjogu/zomato:image1'
                     }
                 }
