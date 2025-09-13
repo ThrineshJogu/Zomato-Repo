@@ -21,6 +21,13 @@ pipeline {
                 }
             }
         }
+        stage('quality gates'){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-password'
+                }
+            }
+        }
         stage('image'){
             steps{
                 sh 'docker build -t image1 .'
@@ -33,13 +40,13 @@ pipeline {
         }
         stage('tag'){
             steps{
-                sh 'docker tag image1 thrineshjogu/zomato:image'
+                sh 'docker tag image1 thrineshjogu/zomato:image1'
             }
         }
         stage('push'){
             steps{
                 script{
-                    withDockerRegistry(credentialsId: 'docker-hubs') {
+                    withDockerRegistry(credentialsId: 'docker-password') {
                        sh 'docker push thrineshjogu/zomato:image1'
                     }
                 }
@@ -48,7 +55,6 @@ pipeline {
         stage('container'){
             steps{
                 sh '''
-                    docker rm -f zomato:image1
                     docker run -itd --name zomato -p 3000:3000 zomato:image1
                 '''
             }
