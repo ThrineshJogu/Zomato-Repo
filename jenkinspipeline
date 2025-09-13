@@ -40,7 +40,7 @@ pipeline {
             steps{
                 scripts{
                     withDockerRegistry(credentialsId: 'docker-hubs'){
-                       sh 'docker push thrineshjogu/zomato:image '
+                       sh 'docker push thrineshjogu/zomato:image1'
                     }
                 }
             } 
@@ -48,9 +48,10 @@ pipeline {
         stage('container'){
             steps{
                 sh '''
-                docker rm -f $(docker ps)
-                docker run -itd --name zomato -p 3000:3000 image
+                    docker rm -f zomato
+                    docker run -itd --name zomato -p 3000:3000 zomato:image1
                 '''
+
             }
         }
     }
